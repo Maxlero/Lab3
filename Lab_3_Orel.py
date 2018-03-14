@@ -88,7 +88,7 @@ def enter_values():
                 print("Кажется на промежутке [" + str(a) + ", " + str(b) + "] есть один или несколько корней.")
                 break
             else:
-                print("Кажется на введенном промежутке нет корня. Попробуйте еще раз..")
+                print("Кажется на введенном промежутке нет коня. Попробуйте еще раз..")
 
         except ValueError:
             print("Кажется с промежутком что-то не так. Попробуйте другой..")
@@ -149,9 +149,9 @@ def lobachevsky_method_interface():
     temp_f_x3 = str("%.5e" % res[2][2])
 
     print(
-        ("Корени уравнения x1 = {0} ({1}), x2 = {2} ({3}), x3 = {4} ({5}) \n" +
+        ("Корени уравнения: x1 = {0} ({1}), x2 = {2} ({3}), x3 = {4} ({5}) \n" +
          "Найдены за {6} итерации(ий) \n" +
-         "Функции в этой точке f(x1) = {7}, f(x2) = {8}, f(x3) = {9} <= {10} (точность)").format(
+         "Функции в этих точках: f(x1) = {7}, f(x2) = {8}, f(x3) = {9} <= {10} (точность)").format(
             temp_x1_e, temp_x1_f,
             temp_x2_e, temp_x2_f,
             temp_x3_e, temp_x3_f,
@@ -160,6 +160,39 @@ def lobachevsky_method_interface():
             accuracy
         )
     )
+
+
+def func_bern(x2, x1, x0):
+    global a0, a1, a2, a3
+    return - a1 * x2 - a2 * x1 - a3 * x0
+    # return -a1 * x2 ** 2 + a2 * x1 - a3 * x0
+    # 3, -24, 10
+
+
+def bernoulli_method(a, b, c, iterations):
+    x = func_bern(a, b, c)
+
+    if abs(f(x / a)) <= accuracy:
+        return [x / a, iterations, f(x / a)]
+
+    return bernoulli_method(x, a, b, iterations + 1)
+
+
+def bernoulli_method_interface():
+    global accuracy
+
+    print("___________________________________________________________________________________________________________")
+    print("Метод Бернулла:")
+
+    iterations = 0
+    # начальные приближения
+    a = 1
+    b = 2
+    c = 3
+
+    res = bernoulli_method(a, b, c, iterations)
+
+    print(res)
 
 
 if __name__ == "__main__":
@@ -172,18 +205,24 @@ if __name__ == "__main__":
 
     # нарисуем функцию и её производной на промежутке заданном впараметрах проагрммы сверху
     print("Выведен график функции и график производной")
-    build_function(START_X, END_X, 0.01, f)
-    build_function(START_X, END_X, 0.01, diff_f)
-    show_plot()
-
-    try:
-        lobachevsky_method_interface()
-    except Exception as e:
-        print(e)
+    # build_function(START_X, END_X, 0.01, f)
+    # build_function(START_X, END_X, 0.01, diff_f)
+    # show_plot()
+    #
+    # try:
+    #     lobachevsky_method_interface()
+    # except Exception as e:
+    #     print(e)
 
     print()
 
     try:
-        lobachevsky_method_interface()
+        bernoulli_method_interface()
     except Exception as e:
         print(e)
+
+    # a0, a1, a2, a3 = 1, 3, -24, 10
+    # x ** 3 + a1 * x ** 2 + a2 * x + a3
+    # x ** 3 + 3 * x ** 2 - 24 * x + 10
+    # x0 = 1, x1 = 2
+    # x_max = - (3 * x ** 2 - 24 * x + 10)
