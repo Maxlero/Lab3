@@ -10,7 +10,6 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
-from scipy.misc import derivative
 
 # Constants
 accuracy = 0.00001
@@ -21,6 +20,9 @@ END_Y = 100
 
 # IMPORTANT! Look at your function
 a0, a1, a2, a3 = 1, 3, -24, 10
+
+
+# testing data
 # a0, a1, a2, a3 = 1, -3, 0, 3
 
 
@@ -186,20 +188,9 @@ def gornor_is_the_best(root):
     b0 = a0
     b1 = root * b0 + a1
     b2 = root * b1 + a2
-    # b3 must be close to zero
     b3 = root * b2 + a3
-
-    a0 = b0
-    a1 = b1
-    a2 = b2
-    a3 = b3
-
-
-#
-#
-# def gornor_f(x):
-#     global a0, a1, a2, a3
-#     return a0 * x ** 2 + a1 * x ** 1 + a2
+    a0, a1, a2, a3 = b0, b1, b2, b3
+    # b3, b2, b1 must be close to zero(depends of power of the polynomial)
 
 
 def bernoulli_method_interface():
@@ -214,36 +205,45 @@ def bernoulli_method_interface():
     a = 1
     b = 2
     c = 3
-    res = bernoulli_method(a, b, c, iterations)
-    print(res)
+    res1 = bernoulli_method(a, b, c, iterations)
 
-    gornor_is_the_best(res[0])
+    gornor_is_the_best(res1[0])
 
     iterations = 0
     # начальные приближения
     a = 5
     b = 6
-    res = bernoulli_method_2(a, b, iterations)
-    print(res)
+    res2 = bernoulli_method_2(a, b, iterations)
 
-    gornor_is_the_best(res[0])
+    gornor_is_the_best(res2[0])
     # начальные приближения
     a = 5
-    res = bernoulli_method_3(a, iterations)
-    print(res)
+    res3 = bernoulli_method_3(a, iterations)
 
-    temp_x1_e = str("%.2e" % res[0])
-    temp_x1_f = str("%.6f" % res[0])
-    temp_iterations = str(res[1])
-    temp_f_x1 = str("%.5e" % res[2])
+    temp_x1_e = str("%.2e" % res1[0])
+    temp_x1_f = str("%.6f" % res1[0])
+    temp_x2_e = str("%.2e" % res2[0])
+    temp_x2_f = str("%.6f" % res2[0])
+    temp_x3_e = str("%.2e" % res3[0])
+    temp_x3_f = str("%.6f" % res3[0])
+
+    temp_iterations_1 = str(res1[1])
+    temp_iterations_2 = str(res2[1])
+    temp_iterations_3 = str(res3[1])
+
+    temp_f_x1 = str("%.5e" % res1[2])
+    temp_f_x2 = str("%.5e" % res1[2])
+    temp_f_x3 = str("%.5e" % res2[2])
 
     print(
-        ("Максимальный Корени уравнения: x1 = {0} ({1}) \n" +
-         "Найдены за {2} итерации(ий) \n" +
-         "Функции в этих точках: f(x1) = {3} <= {4} (точность)").format(
+        ("Корени уравнения: x1 = {0} ({1}), x2 = {2} ({3}), x3 = {4} ({5}) \n" +
+         "Найдены за {6}, {7}, {8} итерации(ий) соответственно\n" +
+         "Функции в этих точках: f(x1) = {9}, f(x2) = {10}, f(x3) = {11} <= {12} (точность)").format(
             temp_x1_e, temp_x1_f,
-            temp_iterations,
-            temp_f_x1,
+            temp_x2_e, temp_x2_f,
+            temp_x3_e, temp_x3_f,
+            temp_iterations_1, temp_iterations_2, temp_iterations_3,
+            temp_f_x1, temp_f_x2, temp_f_x3,
             accuracy
         )
     )
@@ -258,25 +258,18 @@ if __name__ == "__main__":
     sys.setrecursionlimit(2000)
 
     # нарисуем функцию и её производной на промежутке заданном впараметрах проагрммы сверху
-    # print("Выведен график функции и график производной")
-    # build_function(START_X, END_X, 0.01, f)
-    # build_function(START_X, END_X, 0.01, diff_f)
-    # show_plot()
-    #
+    print("Выведен график функции и график производной")
+    build_function(START_X, END_X, 0.01, f)
+    show_plot()
+
     try:
         lobachevsky_method_interface()
     except Exception as e:
         print(e)
 
-    print("dodododoododododood")
+    print()
 
     try:
         bernoulli_method_interface()
     except Exception as e:
         print(e)
-
-    # a0, a1, a2, a3 = 1, 3, -24, 10
-    # x ** 3 + a1 * x ** 2 + a2 * x + a3
-    # x ** 3 + 3 * x ** 2 - 24 * x + 10
-    # x0 = 1, x1 = 2
-    # x_max = - (3 * x ** 2 - 24 * x + 10)
